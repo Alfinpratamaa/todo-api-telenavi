@@ -41,6 +41,7 @@ test('it can export todos with filters', function () {
         ->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 });
 
+// DIUBAH: Menyesuaikan dengan struktur response {"status_summary": {...}}
 test('it returns chart data by status', function () {
     Todo::factory()->create(['status' => 'pending']);
     Todo::factory()->create(['status' => 'pending']);
@@ -49,11 +50,14 @@ test('it returns chart data by status', function () {
     $this->getJson('/api/chart?type=status')
         ->assertStatus(200)
         ->assertJson([
-            'pending' => 2,
-            'completed' => 1,
+            'status_summary' => [
+                'pending' => 2,
+                'completed' => 1,
+            ]
         ]);
 });
 
+// DIUBAH: Menyesuaikan dengan struktur response {"priority_summary": {...}}
 test('it returns chart data by priority', function () {
     Todo::factory()->create(['priority' => 'high']);
     Todo::factory()->create(['priority' => 'low']);
@@ -62,11 +66,14 @@ test('it returns chart data by priority', function () {
     $this->getJson('/api/chart?type=priority')
         ->assertStatus(200)
         ->assertJson([
-            'high' => 1,
-            'low' => 2,
+            'priority_summary' => [
+                'high' => 1,
+                'low' => 2,
+            ]
         ]);
 });
 
+// DIUBAH: Menyesuaikan dengan struktur response {"assignee_summary": {"Charlie": {...}}}
 test('it returns chart data by assignee', function () {
     Todo::factory()->create([
         'assignee' => 'Charlie',
@@ -79,24 +86,18 @@ test('it returns chart data by assignee', function () {
         'time_tracked' => 10
     ]);
 
-    $response = $this->getJson('/api/chart?type=assignee')
+    $this->getJson('/api/chart?type=assignee')
         ->assertStatus(200)
         ->assertJsonStructure([
-            'type',
-            'data' => [
-                '*' => [
-                    'assignee',
+            'assignee_summary' => [
+                'Charlie' => [
                     'total_todos',
-                    'pending_todos',
-                    'total_time_tracked_completed'
+                    'total_pending_todos',
+                    'timetracked_completed_todos',
                 ]
             ]
-        ]);
-
-    $data = $response->json();
-    $charlieData = collect($data['data'])->firstWhere('assignee', 'Charlie');
-
-    expect($charlieData['total_todos'])->toBe(2);
-    expect($charlieData['pending_todos'])->toBe(1);
-    expect($charlieData['total_time_tracked_completed'])->toBe(60);
+        ])
+        ->assertJsonPath('assignee_summary.Charlie.total_todos', 2)
+        ->assertJsonPath('assignee_summary.Charlie.total_pending_todos', 1)
+        ->assertJsonPath('assignee_summary.Charlie.timetracked_completed_todos', 60);
 });
