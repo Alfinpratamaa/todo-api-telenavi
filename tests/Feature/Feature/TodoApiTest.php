@@ -22,9 +22,9 @@ test('it can create a todo with valid data', function () {
 
 test('it returns validation errors for invalid data', function () {
     $todoData = [
-        'title' => '', // Required field is empty
-        'due_date' => now()->subDay()->format('Y-m-d'), // Past date
-        'priority' => 'critical', // Invalid enum
+        'title' => '',
+        'due_date' => now()->subDay()->format('Y-m-d'),
+        'priority' => 'critical',
     ];
 
     $this->postJson('/api/todos', $todoData)

@@ -1,6 +1,5 @@
 <?php
 
-// app/Exports/TodosExport.php
 namespace App\Exports;
 
 use App\Models\Todo;
@@ -22,33 +21,53 @@ class TodosExport implements FromCollection, WithHeadings, WithMapping
     {
         $query = Todo::query();
 
-        // Terapkan filter berdasarkan request
-        $query->when($this->request->input('title'), fn($q, $title) => $q->where('title', 'like', "%{$title}%"));
-        $query->when($this->request->input('assignee'), fn($q, $assignee) => $q->where('assignee', $assignee));
-        $query->when($this->request->input('status'), fn($q, $status) => $q->where('status', $status));
-        $query->when($this->request->input('priority'), fn($q, $priority) => $q->where('priority', $priority));
+        $query->when(
+            $this->request->input('title'),
+            fn($q, $title) => $q->where('title', 'like', "%{$title}%")
+        );
 
-        // Filter range tanggal
-        $query->when($this->request->input('due_date_start'), fn($q, $date) => $q->where('due_date', '>=', $date));
-        $query->when($this->request->input('due_date_end'), fn($q, $date) => $q->where('due_date', '<=', $date));
+        $query->when(
+            $this->request->input('assignee'),
+            fn($q, $assignee) => $q->whereIn('assignee', explode(',', $assignee))
+        );
 
-        // Filter range time_tracked
-        $query->when($this->request->input('time_tracked_min'), fn($q, $min) => $q->where('time_tracked', '>=', $min));
-        $query->when($this->request->input('time_tracked_max'), fn($q, $max) => $q->where('time_tracked', '<=', $max));
+        $query->when(
+            $this->request->input('status'),
+            fn($q, $status) => $q->whereIn('status', explode(',', $status))
+        );
 
-        // Dapatkan data utama
+        $query->when(
+            $this->request->input('priority'),
+            fn($q, $priority) => $q->whereIn('priority', explode(',', $priority))
+        );
+
+
+
+        $query->when(
+            $this->request->input('due_date_start'),
+            fn($q, $date) => $q->where('due_date', '>=', $date)
+        );
+        $query->when(
+            $this->request->input('due_date_end'),
+            fn($q, $date) => $q->where('due_date', '<=', $date)
+        );
+
+        $query->when(
+            $this->request->input('time_tracked_min'),
+            fn($q, $min) => $q->where('time_tracked', '>=', $min)
+        );
+        $query->when(
+            $this->request->input('time_tracked_max'),
+            fn($q, $max) => $q->where('time_tracked', '<=', $max)
+        );
+
         $todos = $query->get();
 
-        // Buat summary row
         if ($todos->isNotEmpty()) {
-            $totalTimeTracked = $todos->sum('time_tracked');
-            $totalTodos = $todos->count();
-
-            // Tambahkan objek kosong sebagai baris summary
             $summary = new \stdClass();
             $summary->is_summary = true;
-            $summary->total_todos = $totalTodos;
-            $summary->total_time_tracked = $totalTimeTracked;
+            $summary->total_todos = $todos->count();
+            $summary->total_time_tracked = $todos->sum('time_tracked');
             $todos->push($summary);
         }
 
@@ -69,15 +88,14 @@ class TodosExport implements FromCollection, WithHeadings, WithMapping
 
     public function map($todo): array
     {
-        // Cek jika ini adalah baris summary
         if (isset($todo->is_summary)) {
             return [
-                'TOTAL', // Kolom Title
-                '', // Kolom Assignee
-                '', // Kolom Due Date
-                $todo->total_time_tracked, // Kolom Time Tracked
-                "{$todo->total_todos} Todos", // Kolom Status
-                '', // Kolom Priority
+                'TOTAL',
+                '',
+                '',
+                $todo->total_time_tracked,
+                "{$todo->total_todos} Todos",
+                '',
             ];
         }
 
