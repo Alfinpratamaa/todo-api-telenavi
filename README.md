@@ -64,7 +64,7 @@ Configure database for testing in `phpunit.xml`:
 <php>
    <env name="APP_ENV" value="testing"/>
    <env name="DB_CONNECTION" value="pgsql"/>
-   <env name="DB_DATABASE" value="todo_api"/>
+   <env name="DB_DATABASE" value="todo_api_test"/>
    <env name="DB_USERNAME" value="postgres"/>
    <env name="DB_PASSWORD" value="postgres"/>
 </php>
@@ -75,10 +75,12 @@ Configure database for testing in `phpunit.xml`:
 Create test database:
 
 ```sql
-CREATE DATABASE todo_api;
+CREATE DATABASE todo_api_test;
 ```
 
 5. Run migrations
+
+before migrate makesure to changes env for database testing
 
 ```bash
 php artisan migrate
