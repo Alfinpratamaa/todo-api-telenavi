@@ -253,11 +253,7 @@ Send a GET request to `/chart` with a type parameter to get aggregated data.
 **Example to get data by assignee:**
 
 ```
-?type=assignee
+/chart?type=assignee
 ```
 
 Returns a JSON object with aggregated data, perfect for populating charts. Available types: `status`, `priority`, `assignee`.
-
-```
-
-```
