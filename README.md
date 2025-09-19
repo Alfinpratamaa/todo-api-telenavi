@@ -159,7 +159,7 @@ or can copy paste on this :
                 "url": {
                     "raw": "{{base_url}}/todos/export?status=in_progress&priority=high",
                     "host": ["{{base_url}}"],
-                    "path": ["export"],
+                    "path": ["todos","export"],
                     "query": [
                         {
                             "key": "status",
