@@ -232,17 +232,22 @@ Returns the newly created task data.
 
 ### Export Todos to Excel
 
-Send a GET request to `/export`. You can add query parameters to filter the results.
+Send a GET request to `/todos/export`. You can add query parameters to filter the results.
 
-**Endpoint:** `GET /export`
+**Endpoint:** `GET /todos/export`
 
 **Example with filters:**
 
 ```
-/export?status=completed,in_progress&priority=high
+/todos/export?status=completed,in_progress&priority=high
 ```
 
 Downloads an `.xlsx` file containing the filtered tasks and a summary row.
+
+> **Note:** To view or download the Excel file, you can either:
+>
+> -   **In Postman**: Send the request, click the three dots (⋯) next to "Save Response", then select "Save response to file" to download the `.xlsx` file
+> -   **In Browser**: Simply paste the URL (e.g., `http://127.0.0.1:8000/api/todos/export?status=completed`) in your browser address bar to trigger the file download
 
 ### Get Chart Data
 
