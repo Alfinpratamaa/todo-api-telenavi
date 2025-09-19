@@ -9,7 +9,7 @@ Route::prefix('todos')->group(function () {
     Route::get('/', [TodoController::class, 'index']);
     Route::get('/{todo}', [TodoController::class, 'show']);
     Route::put('/{todo}', [TodoController::class, 'update']);
-    Route::patch('/{todo}', [TodoController::class, 'update']);
+    Route::delete('/{todo}', [TodoController::class, 'destroy']);
     Route::get('/export', [TodoController::class, 'export']);
 });
 
