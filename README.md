@@ -84,10 +84,9 @@ php artisan migrate
 
 or
 
-````bash
+```bash
 php aritsan migrate --seed
 ```
-
 
 > **Note:** You can customize the example data by modifying the factory in `database/factories/TodoFactory.php` or the seeder in `database/seeders/TodoSeeder.php`.
 
@@ -258,4 +257,7 @@ Send a GET request to `/chart` with a type parameter to get aggregated data.
 ```
 
 Returns a JSON object with aggregated data, perfect for populating charts. Available types: `status`, `priority`, `assignee`.
-````
+
+```
+
+```
