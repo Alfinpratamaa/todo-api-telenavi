@@ -20,7 +20,7 @@ RESTful API for todo app built with Laravel 12, PostgreSQL, and Pest testing.
 
 ```bash
 git clone https://github.com/Alfinpratamaa/todo-api-telenavi.git
-cd todo-api
+cd todo-api-telenavi
 ```
 
 2. Install dependencies
@@ -52,6 +52,28 @@ DB_PORT=5432
 DB_DATABASE=todo_api
 DB_USERNAME=postgres
 DB_PASSWORD=postgres
+```
+
+> **Note:** Feel free to change the database configuration above according to your PostgreSQL setup (host, port, username, password, etc.).
+
+Configure database for testing in `phpunit.xml`:
+
+```xml
+<php>
+   <env name="APP_ENV" value="testing"/>
+   <env name="DB_CONNECTION" value="pgsql"/>
+   <env name="DB_DATABASE" value="todo_api_test"/>
+   <env name="DB_USERNAME" value="postgres"/>
+   <env name="DB_PASSWORD" value="postgres"/>
+</php>
+```
+
+> **Note:** Update the testing database credentials to match your PostgreSQL configuration if different from the defaults above.
+
+Create test database:
+
+```sql
+CREATE DATABASE todo_api_test;
 ```
 
 5. Run migrations
