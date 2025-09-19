@@ -1,6 +1,6 @@
 # Todo API (Laravel 12)
 
-RESTful API for task management built with Laravel 12, PostgreSQL, and Pest testing.
+RESTful API for todo app built with Laravel 12, PostgreSQL, and Pest testing.
 
 ## Features
 
