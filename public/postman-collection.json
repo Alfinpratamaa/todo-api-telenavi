@@ -1,0 +1,84 @@
+{
+    "info": {
+        "_postman_id": "c1a2b3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+        "name": "Todo Api Telenavi",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Create Todo",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"title\": \"Develop new chart API\",\n    \"assignee\": \"John Doe\",\n    \"due_date\": \"2025-10-15\",\n    \"priority\": \"high\",\n    \"status\": \"in_progress\",\n    \"time_tracked\": 120\n}",
+                    "options": {
+                        "raw": {
+                            "language": "json"
+                        }
+                    }
+                },
+                "url": {
+                    "raw": "{{base_url}}/todos",
+                    "host": ["{{base_url}}"],
+                    "path": ["todos"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Export Todos to Excel",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/export?status=in_progress&priority=high",
+                    "host": ["{{base_url}}"],
+                    "path": ["export"],
+                    "query": [
+                        {
+                            "key": "status",
+                            "value": "in_progress"
+                        },
+                        {
+                            "key": "priority",
+                            "value": "high"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "Get Chart Data",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/chart?type=assignee",
+                    "host": ["{{base_url}}"],
+                    "path": ["chart"],
+                    "query": [
+                        {
+                            "key": "type",
+                            "value": "assignee"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1"
+        }
+    ]
+}
