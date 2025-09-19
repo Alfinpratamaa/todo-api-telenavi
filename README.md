@@ -2,7 +2,7 @@
 
 API create and get for todo app built with Laravel 12, PostgreSQL, and Pest testing.
 
-**Note:** This API focuses on creating and reading todos. It does not include update or delete operations. Additional endpoints include chart data aggregation and Excel export functionality with filtering capabilities.
+
 
 ## Features
 
