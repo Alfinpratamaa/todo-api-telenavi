@@ -157,7 +157,7 @@ or can copy paste on this :
                 "method": "GET",
                 "header": [],
                 "url": {
-                    "raw": "{{base_url}}/export?status=in_progress&priority=high",
+                    "raw": "{{base_url}}/todos/export?status=in_progress&priority=high",
                     "host": ["{{base_url}}"],
                     "path": ["export"],
                     "query": [
