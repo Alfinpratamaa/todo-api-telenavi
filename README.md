@@ -109,6 +109,8 @@ Run test suite:
 php artisan test
 ```
 
+> **Note:** Tests are designed to pass with the seeded data. Ensure you run `php artisan migrate --seed` before testing and avoid modifying the factory data in `database/factories/TodoFactory.php` to maintain test consistency.
+
 ## Postman Collection
 
 Import `public/postman-collection.json` into Postman.
