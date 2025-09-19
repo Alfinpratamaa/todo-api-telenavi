@@ -19,7 +19,7 @@ RESTful API for task management built with Laravel 12, PostgreSQL, and Pest test
 1. Clone repository
 
 ```bash
-git clone https://github.com/your-username/todo-api.git
+git clone https://github.com/Alfinpratamaa/todo-api-telenavi.git
 cd todo-api
 ```
 
