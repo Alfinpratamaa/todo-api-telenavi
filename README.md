@@ -165,7 +165,7 @@ or can copy paste on this :
     "variable": [
         {
             "key": "base_url",
-            "value": "http://127.0.0.1"
+            "value": "http://127.0.0.1:8000/api"
         }
     ]
 }
