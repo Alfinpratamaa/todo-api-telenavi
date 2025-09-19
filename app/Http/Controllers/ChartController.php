@@ -11,49 +11,63 @@ class ChartController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $type = $request->get('type', 'status');
+        $request->validate([
+            'type' => ['sometimes', 'in:status,priority,assignee']
+        ]);
 
-        return match ($type) {
-            'status' => $this->getStatusChart(),
-            'priority' => $this->getPriorityChart(),
-            'assignee' => $this->getAssigneeChart(),
-            default => response()->json(['error' => 'Invalid chart type'], 400)
+        $type = $request->get('type', 'status');
+        $data = match ($type) {
+            'status'   => $this->getStatusChartData(),
+            'priority' => $this->getPriorityChartData(),
+            'assignee' => $this->getAssigneeChartData(),
         };
+
+        return response()->json($data);
     }
 
-    private function getStatusChart(): JsonResponse
+    private function getStatusChartData(): array
     {
-        $data = Todo::select('status', DB::raw('count(*) as total'))
+        $data = Todo::query()
+            ->select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->get()
             ->pluck('total', 'status');
 
-        return response()->json($data);
+        return ['status_summary' => $data];
     }
-
-    private function getPriorityChart(): JsonResponse
+    private function getPriorityChartData(): array
     {
-        $data = Todo::select('priority', DB::raw('count(*) as total'))
+        $data = Todo::query()
+            ->select('priority', DB::raw('count(*) as total'))
             ->groupBy('priority')
             ->get()
             ->pluck('total', 'priority');
 
-        return response()->json($data);
+        return ['priority_summary' => $data];
     }
-
-    private function getAssigneeChart(): JsonResponse
+    private function getAssigneeChartData(): array
     {
-        $data = Todo::select('assignee')
-            ->selectRaw('COUNT(*) as total_todos')
-            ->selectRaw('SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as pending_todos', ['pending'])
-            ->selectRaw('SUM(CASE WHEN status = ? THEN time_tracked ELSE 0 END) as total_time_tracked_completed', ['completed'])
+        $data = Todo::query()
+            ->select(
+                'assignee',
+                DB::raw('COUNT(*) as total_todos'),
+                DB::raw("SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as total_pending_todos"),
+                DB::raw("SUM(CASE WHEN status = 'completed' THEN time_tracked ELSE 0 END) as timetracked_completed_todos")
+            )
             ->whereNotNull('assignee')
             ->groupBy('assignee')
             ->get();
 
-        return response()->json([
-            'type' => 'assignee',
-            'data' => $data
-        ]);
+        $transformedData = $data->mapWithKeys(function ($item) {
+            return [
+                $item->assignee => [
+                    'total_todos' => (int) $item->total_todos,
+                    'total_pending_todos' => (int) $item->total_pending_todos,
+                    'timetracked_completed_todos' => (int) $item->timetracked_completed_todos,
+                ]
+            ];
+        });
+
+        return ['assignee_summary' => $transformedData];
     }
 }
